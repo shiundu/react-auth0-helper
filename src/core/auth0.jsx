@@ -7,17 +7,8 @@ import {
   flatten,
   onRedirectCallback,
   getAuth0Config,
+  Auth0Props,
 } from '../utils/authUtils';
-
-export type Auth0Props = {
-  client_id: string,
-  domain: string,
-  audience: string,
-  scope: string,
-  redirect_uri: string,
-  response_type: string,
-  leeway: number | string
-}
 
 export type Auth0ProviderInterface = {
   children: React.ReactNode,
