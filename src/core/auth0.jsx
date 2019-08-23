@@ -5,32 +5,43 @@ import createAuth0Client from '@auth0/auth0-spa-js';
 import { AuthProvider } from './auth0Context';
 import {
   flatten,
-  getAuth0Config,
   onRedirectCallback,
+  getAuth0Config,
 } from '../utils/authUtils';
+
+export type Auth0Props = {
+  client_id: string,
+  domain: string,
+  audience: string,
+  scope: string,
+  redirect_uri: string,
+  response_type: string,
+  leeway: number | string
+}
 
 export type Auth0ProviderInterface = {
   children: React.ReactNode,
-  onSuccessfulLogin: (user: any) => void
+  onSuccessfulLogin: (user: any) => void,
+  auth0config: Auth0Props
 };
 
 const Auth0Provider = ({
   children,
   onSuccessfulLogin,
+  auth0config = getAuth0Config(),
 }: Auth0ProviderInterface) => {
   const [isAuthenticated, setIsAuthenticated] = React.useState();
   const [user, setUser] = React.useState();
   const [auth0Client, setAuth0] = React.useState();
   const [loading, setLoading] = React.useState(true);
+  const [popupOpen, setPopupOpen] = React.useState(false);
   const [accessToken, setAccessToken] = React.useState();
-
-  const initOptions = getAuth0Config();
 
   React.useEffect(() => {
     const initAuth0 = async () => {
       /* Instantiate AuthO client */
       setLoading(true);
-      const auth0FromHook = await createAuth0Client(initOptions);
+      const auth0FromHook = await createAuth0Client(auth0config);
       setAuth0(auth0FromHook);
 
       /* get code from url and redirect to last url before being redirected to the login page */
@@ -64,6 +75,21 @@ const Auth0Provider = ({
     // eslint-disable-next-line
   }, []);
 
+  const loginWithPopup = async (params = {}) => {
+    setPopupOpen(true);
+    try {
+      await auth0Client.loginWithPopup(params);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    } finally {
+      setPopupOpen(false);
+    }
+
+    setUser(await auth0Client.getUser());
+    setIsAuthenticated(true);
+  };
+
   const handleRedirectCallback = async () => {
     setLoading(true);
     /* get user details */
@@ -83,6 +109,10 @@ const Auth0Provider = ({
     setLoading(false);
   };
 
+  const onLogout = (...p: string) => {
+    auth0Client.logout(...p || window.location.origin);
+  };
+
   return (
     <AuthProvider
       value={{
@@ -90,10 +120,12 @@ const Auth0Provider = ({
         user,
         accessToken,
         loading,
+        popupOpen,
+        loginWithPopup,
         handleRedirectCallback,
         getIdTokenClaims: (...p) => auth0Client && auth0Client.getIdTokenClaims(...p),
         loginWithRedirect: (...p) => auth0Client && auth0Client.loginWithRedirect(...p),
-        logout: (...p) => auth0Client.logout(...p),
+        logout: (...p) => onLogout(...p),
       }}
     >
       {children}

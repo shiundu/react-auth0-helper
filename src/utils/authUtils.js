@@ -1,6 +1,6 @@
 // @flow
 
-export type AuthOInitialOptions = {
+export type Auth0Props = {
   client_id: string,
   domain: string,
   audience: string,
@@ -10,21 +10,20 @@ export type AuthOInitialOptions = {
   leeway: number | string
 };
 
-export const getAuth0Config = (): AuthOInitialOptions => {
-  const checkEnv = (env: ?string | ?typeof undefined): string => {
+export const getAuth0Config = (): Auth0Props => {
+  const checkEnv = (env: ?string | ?typeof undefined, envName: string): string => {
     if (!env) {
-      throw new Error('.env variables required is required');
+      throw new Error(`.env.${envName} variables required is required`);
     }
-
     return env;
   };
 
   return {
-    client_id: checkEnv(process.env.REACT_APP_AUTH0_CLIENT_ID),
-    domain: checkEnv(process.env.REACT_APP_AUTH0_DOMAIN),
-    audience: checkEnv(process.env.REACT_APP_AUTH0_AUDIENCE),
-    scope: checkEnv(process.env.REACT_APP_AUTH0_SCOPE),
-    redirect_uri: checkEnv(process.env.REACT_APP_AUTH0_CALLBACK_URL),
+    client_id: checkEnv(process.env.REACT_APP_AUTH0_CLIENT_ID, 'REACT_APP_AUTH0_CLIENT_ID'),
+    domain: checkEnv(process.env.REACT_APP_AUTH0_DOMAIN, 'REACT_APP_AUTH0_DOMAIN'),
+    audience: checkEnv(process.env.REACT_APP_AUTH0_AUDIENCE, 'REACT_APP_AUTH0_AUDIENCE'),
+    scope: checkEnv(process.env.REACT_APP_AUTH0_SCOPE, 'REACT_APP_AUTH0_SCOPE'),
+    redirect_uri: checkEnv(process.env.REACT_APP_AUTH0_CALLBACK_URL, 'REACT_APP_AUTH0_CALLBACK_URL'),
     response_type:
       process.env.REACT_APP_AUTH0_RESPONSE_TYPE || 'id_token token',
     leeway: process.env.REACT_APP_AUTH0_LEEWAY || 40,
