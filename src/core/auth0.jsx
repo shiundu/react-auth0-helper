@@ -1,26 +1,16 @@
-// @flow
 // src/react-auth0-wrapper.js
-import * as React from 'react';
-import createAuth0Client from '@auth0/auth0-spa-js';
-import { AuthProvider } from './auth0Context';
-import {
-  flatten,
-  onRedirectCallback,
-  getAuth0Config,
-  Auth0Props,
-} from '../utils/authUtils';
 
-export type Auth0ProviderInterface = {
-  children: React.ReactNode,
-  onSuccessfulLogin: (user: any) => void,
-  auth0config: Auth0Props
-};
+import createAuth0Client from '@auth0/auth0-spa-js';
+import PropTypes from 'prop-types';
+import * as React from 'react';
+import { flatten, getAuth0Config, onRedirectCallback } from '../utils/authUtils';
+import { AuthProvider } from './auth0Context';
 
 const Auth0Provider = ({
   children,
   onSuccessfulLogin,
   auth0config = getAuth0Config(),
-}: Auth0ProviderInterface) => {
+}) => {
   const [isAuthenticated, setIsAuthenticated] = React.useState();
   const [user, setUser] = React.useState();
   const [auth0Client, setAuth0] = React.useState();
@@ -32,7 +22,7 @@ const Auth0Provider = ({
     const initAuth0 = async () => {
       /* Instantiate AuthO client */
       setLoading(true);
-      const auth0FromHook = await createAuth0Client(auth0config);
+      const auth0FromHook = await createAuth0Client({ auth0config });
       setAuth0(auth0FromHook);
 
       /* get code from url and redirect to last url before being redirected to the login page */
@@ -100,7 +90,7 @@ const Auth0Provider = ({
     setLoading(false);
   };
 
-  const onLogout = (...p: string) => {
+  const onLogout = (...p) => {
     auth0Client.logout(...p || window.location.origin);
   };
 
@@ -122,6 +112,20 @@ const Auth0Provider = ({
       {children}
     </AuthProvider>
   );
+};
+
+Auth0Provider.propTypes = {
+  children: PropTypes.node.isRequired,
+  onSuccessfulLogin: PropTypes.func.isRequired,
+  auth0config: PropTypes.objectOf({
+    client_id: PropTypes.string,
+    domain: PropTypes.string,
+    audience: PropTypes.string,
+    scope: PropTypes.string,
+    redirect_uri: PropTypes.string,
+    response_type: PropTypes.string,
+    leeway: PropTypes.number,
+  }).isRequired,
 };
 
 export default Auth0Provider;

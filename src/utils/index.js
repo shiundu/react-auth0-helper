@@ -1,1 +1,3 @@
-export * from './authUtils';
+import * as utils from './authUtils';
+
+export default { utils };

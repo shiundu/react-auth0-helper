@@ -1,17 +1,5 @@
-// @flow
-
-export type Auth0Props = {
-  client_id: string,
-  domain: string,
-  audience: string,
-  scope: string,
-  redirect_uri: string,
-  response_type: string,
-  leeway: number | string
-};
-
-export const getAuth0Config = (): Auth0Props => {
-  const checkEnv = (env: ?string | ?typeof undefined, envName: string): string => {
+export const getAuth0Config = () => {
+  const checkEnv = (env, envName) => {
     if (!env) {
       throw new Error(`.env.${envName} variables required is required`);
     }
@@ -19,18 +7,30 @@ export const getAuth0Config = (): Auth0Props => {
   };
 
   return {
-    client_id: checkEnv(process.env.REACT_APP_AUTH0_CLIENT_ID, 'REACT_APP_AUTH0_CLIENT_ID'),
-    domain: checkEnv(process.env.REACT_APP_AUTH0_DOMAIN, 'REACT_APP_AUTH0_DOMAIN'),
-    audience: checkEnv(process.env.REACT_APP_AUTH0_AUDIENCE, 'REACT_APP_AUTH0_AUDIENCE'),
+    client_id: checkEnv(
+      process.env.REACT_APP_AUTH0_CLIENT_ID,
+      'REACT_APP_AUTH0_CLIENT_ID',
+    ),
+    domain: checkEnv(
+      process.env.REACT_APP_AUTH0_DOMAIN,
+      'REACT_APP_AUTH0_DOMAIN',
+    ),
+    audience: checkEnv(
+      process.env.REACT_APP_AUTH0_AUDIENCE,
+      'REACT_APP_AUTH0_AUDIENCE',
+    ),
     scope: checkEnv(process.env.REACT_APP_AUTH0_SCOPE, 'REACT_APP_AUTH0_SCOPE'),
-    redirect_uri: checkEnv(process.env.REACT_APP_AUTH0_CALLBACK_URL, 'REACT_APP_AUTH0_CALLBACK_URL'),
+    redirect_uri: checkEnv(
+      process.env.REACT_APP_AUTH0_CALLBACK_URL,
+      'REACT_APP_AUTH0_CALLBACK_URL',
+    ),
     response_type:
       process.env.REACT_APP_AUTH0_RESPONSE_TYPE || 'id_token token',
     leeway: process.env.REACT_APP_AUTH0_LEEWAY || 40,
   };
 };
 
-export const flatten = (xx: any, aToken: string) => {
+export const flatten = (xx, aToken) => {
   const origObj = Object.keys(xx).map((key) => {
     if (typeof xx[key] === 'object') {
       return xx[key];
@@ -43,7 +43,7 @@ export const flatten = (xx: any, aToken: string) => {
   return userObj;
 };
 
-export const onRedirectCallback = (appState: any) => {
+export const onRedirectCallback = (appState) => {
   window.history.replaceState(
     {},
     document.title,
