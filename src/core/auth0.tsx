@@ -1,28 +1,39 @@
-// src/react-auth0-wrapper.js
-
 import createAuth0Client from '@auth0/auth0-spa-js';
-import PropTypes from 'prop-types';
+import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
 import * as React from 'react';
-import { flatten, getAuth0Config, onRedirectCallback } from '../utils/authUtils';
+import { flatten, onRedirectCallback } from '../utils/authUtils';
 import { AuthProvider } from './auth0Context';
+
+type ConfigProps = {
+    client_id: string;
+    domain: string;
+    audience: string;
+    scope: string;
+    redirectUri: string;
+    environment: string;
+};
+export interface Auth0ProviderProps {
+  children: React.ReactNode;
+  onSuccessfulLogin: (authProps: any) => void;
+  config: ConfigProps;
+}
 
 const Auth0Provider = ({
   children,
   onSuccessfulLogin,
-  auth0config = getAuth0Config(),
+  config,
 }) => {
-  const [isAuthenticated, setIsAuthenticated] = React.useState();
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   const [user, setUser] = React.useState();
-  const [auth0Client, setAuth0] = React.useState();
+  const [auth0Client, setAuth0] = React.useState<Auth0Client>();
   const [loading, setLoading] = React.useState(true);
-  const [popupOpen, setPopupOpen] = React.useState(false);
   const [accessToken, setAccessToken] = React.useState();
 
   React.useEffect(() => {
     const initAuth0 = async () => {
       /* Instantiate AuthO client */
       setLoading(true);
-      const auth0FromHook = await createAuth0Client({ auth0config });
+      const auth0FromHook = await createAuth0Client(config);
       setAuth0(auth0FromHook);
 
       /* get code from url and redirect to last url before being redirected to the login page */
@@ -56,32 +67,17 @@ const Auth0Provider = ({
     // eslint-disable-next-line
   }, []);
 
-  const loginWithPopup = async (params = {}) => {
-    setPopupOpen(true);
-    try {
-      await auth0Client.loginWithPopup(params);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    } finally {
-      setPopupOpen(false);
-    }
-
-    setUser(await auth0Client.getUser());
-    setIsAuthenticated(true);
-  };
-
   const handleRedirectCallback = async () => {
     setLoading(true);
     /* get user details */
     // eslint-disable-next-line no-unused-vars
-    const redirectCallback = (await auth0Client) && auth0Client.handleRedirectCallback();
+    // auth0Client && auth0Client.handleRedirectCallback();
 
     /* get user details */
-    const getUser = (await auth0Client) && auth0Client.getUser();
+    const getUser = auth0Client && await auth0Client.getUser();
 
     /* get user token */
-    const getTokenSilently = await auth0Client.getTokenSilently();
+    const getTokenSilently = auth0Client &&  await auth0Client.getTokenSilently();
     setAccessToken(getTokenSilently);
 
     /* function called when the authentication process is successful */
@@ -91,7 +87,7 @@ const Auth0Provider = ({
   };
 
   const onLogout = (...p) => {
-    auth0Client.logout(...p || window.location.origin);
+    return auth0Client && auth0Client.logout(...p || window.location.origin);
   };
 
   return (
@@ -101,10 +97,7 @@ const Auth0Provider = ({
         user,
         accessToken,
         loading,
-        popupOpen,
-        loginWithPopup,
         handleRedirectCallback,
-        getIdTokenClaims: (...p) => auth0Client && auth0Client.getIdTokenClaims(...p),
         loginWithRedirect: (...p) => auth0Client && auth0Client.loginWithRedirect(...p),
         logout: (...p) => onLogout(...p),
       }}
@@ -112,20 +105,6 @@ const Auth0Provider = ({
       {children}
     </AuthProvider>
   );
-};
-
-Auth0Provider.propTypes = {
-  children: PropTypes.node.isRequired,
-  onSuccessfulLogin: PropTypes.func.isRequired,
-  auth0config: PropTypes.objectOf({
-    client_id: PropTypes.string,
-    domain: PropTypes.string,
-    audience: PropTypes.string,
-    scope: PropTypes.string,
-    redirect_uri: PropTypes.string,
-    response_type: PropTypes.string,
-    leeway: PropTypes.number,
-  }).isRequired,
 };
 
 export default Auth0Provider;

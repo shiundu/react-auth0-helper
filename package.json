@@ -20,30 +20,37 @@
     "auth-helper",
     "react"
   ],
-  "main": "lib/index.js",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "scripts": {
-    "build": "babel src/ -d lib/",
+    "build": "babel src/ -d build/",
     "prepublish": "yarn run lint && yarn run build",
-    "lint": "./node_modules/.bin/eslint --ext js --ext jsx ./src/**",
-    "lint:fix": "./node_modules/.bin/eslint --fix",
-    "test": "echo \"Error: no test specified\""
+    "lint": "tslint \"src/**/*.{ts,tsx}\" --project ./tsconfig.json",
+    "lint:fix": "tslint \"src/**/*.{ts,tsx}\" --project ./tsconfig.json --fix",
+    "lint:watch": "yarn lint -- --watch"
   },
   "dependencies": {
-    "@auth0/auth0-spa-js": "1.1.1",
-    "prop-types": "15.7.2",
-    "react": "16.9.0"
+    "@auth0/auth0-spa-js": "1.6.5",
+    "react": "16.13.1",
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
-    "@babel/cli": "7.5.5",
-    "@babel/core": "7.5.5",
-    "@babel/plugin-proposal-export-default-from": "7.5.2",
-    "@babel/preset-react": "7.0.0",
-    "babel-eslint": "10.0.2",
-    "eslint": "6.1.0",
-    "eslint-config-airbnb": "18.0.1",
-    "eslint-plugin-import": "2.18.2",
+    "@babel/cli": "7.8.4",
+    "@babel/core": "7.9.0",
+    "@babel/plugin-proposal-export-default-from": "7.8.3",
+    "@babel/preset-react": "7.9.4",
+    "@types/react": "^16.9.34",
+    "babel-eslint": "10.1.0",
+    "eslint": "6.8.0",
+    "eslint-config-airbnb": "18.1.0",
+    "eslint-plugin-import": "2.20.2",
     "eslint-plugin-jsx-a11y": "6.2.3",
-    "eslint-plugin-react": "7.14.3",
-    "eslint-plugin-react-hooks": "1.7.0"
+    "eslint-plugin-react": "7.19.0",
+    "eslint-plugin-react-hooks": "3.0.0",
+    "tslint": "^6.1.1",
+    "tslint-react": "^4.2.0"
   }
 }
