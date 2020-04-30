@@ -1,4 +1,3 @@
-
 export type ConfigProps = {
   client_id: string;
   domain: string;
@@ -11,19 +10,19 @@ export type ConfigProps = {
 };
 
 export type logoutType = {
-  client_id: string,
-  returnTo: string,
+  client_id: string;
+  returnTo: string;
 };
 
-export type logoutProps = {
-  options?: logoutType,
-  federated?: string,
+export type LogoutProps = {
+  options?: logoutType;
+  federated?: string;
 };
 
-export declare type Auth0Props = {
+export type Auth0Props = {
   isLoading: boolean | undefined;
   isAuthenticated: boolean;
-  logout: (logoutProps?: logoutProps) => void;
+  logout: (logoutProps?: LogoutProps) => void;
   user: any;
   accessToken: string;
   handleRedirectCallback: () => void;

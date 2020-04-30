@@ -3,7 +3,7 @@ import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
 import * as React from 'react';
 import { onRedirectCallback } from '../utils/authUtils';
 import { AuthProvider } from './auth0Context';
-import { ConfigProps, logoutProps } from './types';
+import { ConfigProps, LogoutProps } from './types';
 
 export interface Auth0ProviderProps {
   children: React.ReactNode;
@@ -84,7 +84,7 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
     setLoading(false);
   };
 
-  const onLogout = (props: logoutProps) => {
+  const onLogout = (props: LogoutProps) => {
     return auth0Client && auth0Client.logout({
       ...props.options,
       federated: props.federated && !!props.federated
