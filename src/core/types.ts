@@ -2,7 +2,7 @@
 export type ConfigProps = {
   client_id: string;
   domain: string;
-  redirectUri: string;
+  redirect_uri: string;
 };
 
 export declare type Auth0Props = {
