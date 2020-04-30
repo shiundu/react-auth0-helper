@@ -5,12 +5,9 @@ import { flatten, onRedirectCallback } from '../utils/authUtils';
 import { AuthProvider } from './auth0Context';
 
 type ConfigProps = {
-    client_id: string;
-    domain: string;
-    audience: string;
-    scope: string;
-    redirectUri: string;
-    environment: string;
+  client_id: string;
+  domain: string;
+  redirectUri: string;
 };
 export interface Auth0ProviderProps {
   children: React.ReactNode;
@@ -77,7 +74,7 @@ const Auth0Provider = ({
     const getUser = auth0Client && await auth0Client.getUser();
 
     /* get user token */
-    const getTokenSilently = auth0Client &&  await auth0Client.getTokenSilently();
+    const getTokenSilently = auth0Client && await auth0Client.getTokenSilently();
     setAccessToken(getTokenSilently);
 
     /* function called when the authentication process is successful */
