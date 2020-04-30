@@ -7,7 +7,7 @@ const defaultValues = {
   logout: undefined,
   user: undefined,
   accessToken: undefined,
-  handleRedirectCallback: () => { },
+  handleRedirectCallback: () => null,
 };
 
 export const Auth0Context = React.createContext(defaultValues);
