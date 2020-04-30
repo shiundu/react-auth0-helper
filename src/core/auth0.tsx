@@ -15,7 +15,7 @@ export interface Auth0ProviderProps {
   config: ConfigProps;
 }
 
-const Auth0Provider = ({
+const Auth0Provider: React.FC<Auth0ProviderProps> = ({
   children,
   onSuccessfulLogin,
   config,
@@ -84,7 +84,7 @@ const Auth0Provider = ({
   };
 
   const onLogout = (...p) => {
-    return auth0Client && auth0Client.logout(...p || window.location.origin);
+    return auth0Client && auth0Client.logout();
   };
 
   return (

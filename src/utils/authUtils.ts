@@ -30,7 +30,7 @@
 //   };
 // };
 
-export const flatten = (xx, aToken) => {
+export const flatten = (xx: any, aToken: string) => {
   const origObj = Object.keys(xx).map((key) => {
     if (typeof xx[key] === 'object') {
       return xx[key];
@@ -43,7 +43,7 @@ export const flatten = (xx, aToken) => {
   return userObj;
 };
 
-export const onRedirectCallback = (appState) => {
+export const onRedirectCallback = (appState: any) => {
   window.history.replaceState(
     {},
     document.title,
