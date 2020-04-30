@@ -13,11 +13,12 @@ export type ConfigProps = {
 export type logoutType = {
   client_id: string,
   returnTo: string,
-}
+};
+
 export type logoutProps = {
   options?: logoutType,
   federated?: string,
-}
+};
 
 export declare type Auth0Props = {
   isLoading: boolean | undefined;
