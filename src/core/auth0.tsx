@@ -51,7 +51,7 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
         setAccessToken(getTokenSilently);
 
         /* function called when the authentication process is successful */
-        onSuccessfulLogin({ user, accessToken });
+        onSuccessfulLogin({ user: getUser, accessToken: getTokenSilently });
       } else {
         /* redirects to login page is user is not authenticated */
         if (!checkIfAuthenticated && forceAuth) {
@@ -79,7 +79,7 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
     setAccessToken(getTokenSilently);
 
     /* function called when the authentication process is successful */
-    onSuccessfulLogin({ user, accessToken });
+    onSuccessfulLogin({ user: getUser, accessToken: getTokenSilently });
 
     setLoading(false);
   };
