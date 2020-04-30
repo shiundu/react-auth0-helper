@@ -3,12 +3,8 @@ import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
 import * as React from 'react';
 import { flatten, onRedirectCallback } from '../utils/authUtils';
 import { AuthProvider } from './auth0Context';
+import { ConfigProps } from './types';
 
-type ConfigProps = {
-  client_id: string;
-  domain: string;
-  redirectUri: string;
-};
 export interface Auth0ProviderProps {
   children: React.ReactNode;
   onSuccessfulLogin: (authProps: any) => void;
@@ -20,12 +16,12 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
   children,
   onSuccessfulLogin,
   config,
-  forceAuth,
+  forceAuth = true,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   const [user, setUser] = React.useState();
   const [auth0Client, setAuth0] = React.useState<Auth0Client>();
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = React.useState<boolean>(true);
   const [accessToken, setAccessToken] = React.useState();
 
   React.useEffect(() => {
@@ -58,7 +54,7 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
         onSuccessfulLogin(flatten(getUser, getTokenSilently));
       } else {
         /* redirects to login page is user is not authenticated */
-        if (forceAuth) {
+        if (!checkIfAuthenticated && !forceAuth) {
           auth0FromHook.loginWithRedirect();
         }
       }
@@ -97,10 +93,9 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
         isAuthenticated,
         user,
         accessToken,
-        loading,
-        handleRedirectCallback,
-        loginWithRedirect: (...p) => auth0Client && auth0Client.loginWithRedirect(...p),
+        isLoading: loading,
         logout: (...p) => onLogout(...p),
+        handleRedirectCallback,
       }}
     >
       {children}

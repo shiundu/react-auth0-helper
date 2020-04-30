@@ -1,18 +1,11 @@
 import * as React from 'react';
 import { Auth0Context } from './auth0Context';
+import { Auth0Props } from './types';
 
 export interface WithAuth0Props {
   Component: React.ReactNode;
   props: any;
 }
-
-export declare type Auth0Props = {
-  isLoading: boolean;
-  isAuthenticated: boolean;
-  logout: () => void;
-  user: any;
-  accessToken: string;
-};
 
 const withAuth0 = (Component: React.ReactType) => {
   const Child = ({ ...props }) => {

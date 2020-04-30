@@ -8,9 +8,7 @@
 
   - REACT_APP_AUTH0_CLIENT_ID,
   - REACT_APP_AUTH0_DOMAIN,
-  - REACT_APP_AUTH0_AUDIENCE,
-  - REACT_APP_AUTH0_SCOPE,
-  - REACT_APP_AUTH0_CALLBACK_URL,  
+  - REACT_APP_AUTH0_REDIRECT_URI,  
     defaults:
 
 - available props
@@ -45,10 +43,17 @@ index
           console.info(user)
       };
 
+      const auth0config = {
+        client_id: clientEnv.AUTH0_CLIENT_ID,
+        domain: clientEnv.AUTH0_DOMAIN,
+        redirectUri: clientEnv.AUTH0_DOMAIN,
+      }
+
       ReactDOM.render(
         <Auth0Provider
           onSuccessfulLogin={onSuccessfulLogin}>
-          auth0config={config}
+          config={auth0config}
+          forceAuth={false} // default is true, change to false if users should access even without loging in
       <App />
 
       </Auth0Provider>,

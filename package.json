@@ -1,8 +1,8 @@
 {
   "name": "react-auth0-helper",
   "description": "with @auth0/auth0-spa-js",
-  "version": "1.3.4",
-  "author": "Shiundu",
+  "version": "1.3.5",
+  "author": "Andrea & Shiundu",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/shiundu/react-auth0-helper/issues"
