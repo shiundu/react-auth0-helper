@@ -13,12 +13,14 @@ export interface Auth0ProviderProps {
   children: React.ReactNode;
   onSuccessfulLogin: (authProps: any) => void;
   config: ConfigProps;
+  forceAuth?: boolean;
 }
 
 const Auth0Provider: React.FC<Auth0ProviderProps> = ({
   children,
   onSuccessfulLogin,
   config,
+  forceAuth,
 }) => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   const [user, setUser] = React.useState();
@@ -56,7 +58,9 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
         onSuccessfulLogin(flatten(getUser, getTokenSilently));
       } else {
         /* redirects to login page is user is not authenticated */
-        auth0FromHook.loginWithRedirect();
+        if (forceAuth) {
+          auth0FromHook.loginWithRedirect();
+        }
       }
       setLoading(false);
     };
