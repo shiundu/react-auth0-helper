@@ -1,9 +1,9 @@
 import createAuth0Client from '@auth0/auth0-spa-js';
 import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
 import * as React from 'react';
-import { flatten, onRedirectCallback } from '../utils/authUtils';
+import { onRedirectCallback } from '../utils/authUtils';
 import { AuthProvider } from './auth0Context';
-import { ConfigProps } from './types';
+import { ConfigProps, logoutProps } from './types';
 
 export interface Auth0ProviderProps {
   children: React.ReactNode;
@@ -51,7 +51,7 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
         setAccessToken(getTokenSilently);
 
         /* function called when the authentication process is successful */
-        onSuccessfulLogin(flatten(getUser, getTokenSilently));
+        onSuccessfulLogin({ user, accessToken });
       } else {
         /* redirects to login page is user is not authenticated */
         if (!checkIfAuthenticated && forceAuth) {
@@ -72,19 +72,23 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
 
     /* get user details */
     const getUser = auth0Client && await auth0Client.getUser();
+    setUser(getUser);
 
     /* get user token */
     const getTokenSilently = auth0Client && await auth0Client.getTokenSilently();
     setAccessToken(getTokenSilently);
 
     /* function called when the authentication process is successful */
-    onSuccessfulLogin(flatten(getUser, getTokenSilently));
-    setUser(getUser);
+    onSuccessfulLogin({ user, accessToken });
+
     setLoading(false);
   };
 
-  const onLogout = (...p) => {
-    return auth0Client && auth0Client.logout();
+  const onLogout = (props: logoutProps) => {
+    return auth0Client && auth0Client.logout({
+      ...props.options,
+      federated: props.federated && !!props.federated
+    });
   };
 
   return (
@@ -94,7 +98,7 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
         user,
         accessToken,
         isLoading: loading,
-        logout: (...p) => onLogout(...p),
+        logout: onLogout,
         handleRedirectCallback,
       }}
     >
