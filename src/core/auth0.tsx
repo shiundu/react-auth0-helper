@@ -54,7 +54,7 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
         onSuccessfulLogin(flatten(getUser, getTokenSilently));
       } else {
         /* redirects to login page is user is not authenticated */
-        if (!checkIfAuthenticated && !forceAuth) {
+        if (!checkIfAuthenticated && forceAuth) {
           auth0FromHook.loginWithRedirect();
         }
       }
