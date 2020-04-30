@@ -2,6 +2,8 @@ node_modules/
 
 build/
 
+lib/
+
 *.log
 
 .env
