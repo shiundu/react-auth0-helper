@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Auth0Props } from './types';
+import { WithAuth0Props } from './types';
 
 const defaultValues = {
   isLoading: undefined,
@@ -12,4 +12,4 @@ const defaultValues = {
 
 export const Auth0Context = React.createContext(defaultValues);
 export const AuthProvider = Auth0Context.Provider;
-export const useAuth0 = (): Auth0Props => React.useContext(Auth0Context);
+export const useAuth0 = (): WithAuth0Props => React.useContext(Auth0Context);

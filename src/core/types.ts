@@ -19,7 +19,7 @@ export type LogoutProps = {
   federated?: string;
 };
 
-export type Auth0Props = {
+export type WithAuth0Props = {
   isLoading: boolean | undefined;
   isAuthenticated: boolean;
   logout: (logoutProps?: LogoutProps) => void;
