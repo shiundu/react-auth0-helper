@@ -5,7 +5,7 @@ export const userSetup = (token: string, user: any, namespace: string) => {
     const decodedToken = JWT_DECODE(token);
     const userMetadata = decodedToken[`${namespace}user_metadata`];
     return {
-      user,
+      ...user,
       ...userMetadata,
     };
   }
