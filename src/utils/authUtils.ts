@@ -1,4 +1,4 @@
-const JWT_DECODE = require('jwt_decode');
+import * as JWT_DECODE from 'jwt-decode';
 
 export const userSetup = (token: string, user: any, namespace: string) => {
   if (namespace) {
