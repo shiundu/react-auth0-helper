@@ -44,13 +44,13 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
       setIsAuthenticated(checkIfAuthenticated);
 
       if (checkIfAuthenticated) {
-        /* get user details */
-        const userDetails = await auth0FromHook.getUser();
-        setUser(userDetails);
-
         /* get user token */
         const getTokenSilently = await auth0FromHook.getTokenSilently();
         setAccessToken(getTokenSilently);
+
+        /* get user details */
+        const userDetails = await auth0FromHook.getUser();
+        setUser(userSetup(getTokenSilently, userDetails, namespace));
 
         /* function called when the authentication process is successful */
         onSuccessfulLogin({ user: userSetup(getTokenSilently, userDetails, namespace), accessToken: getTokenSilently });
@@ -70,15 +70,13 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
     setLoading(true);
     /* get user details */
     // eslint-disable-next-line no-unused-vars
-    // auth0Client && auth0Client.handleRedirectCallback();
-
-    /* get user details */
-    const userDetails = auth0Client && await auth0Client.getUser();
-    setUser(userDetails);
-
     /* get user token */
     const getTokenSilently = auth0Client && await auth0Client.getTokenSilently();
     setAccessToken(getTokenSilently);
+
+    /* get user details */
+    const userDetails = auth0Client && await auth0Client.getUser();
+    setUser(userSetup(getTokenSilently, userDetails, namespace));
 
     /* function called when the authentication process is successful */
     onSuccessfulLogin({ user: userSetup(getTokenSilently, userDetails, namespace), accessToken: getTokenSilently });
