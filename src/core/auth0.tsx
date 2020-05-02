@@ -1,7 +1,7 @@
 import createAuth0Client from '@auth0/auth0-spa-js';
 import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
 import * as React from 'react';
-import { onRedirectCallback } from '../utils/authUtils';
+import { onRedirectCallback, userSetup } from '../utils/authUtils';
 import { AuthProvider } from './auth0Context';
 import { ConfigProps, LogoutProps } from './types';
 
@@ -10,6 +10,7 @@ export interface Auth0ProviderProps {
   onSuccessfulLogin: (authProps: any) => void;
   config: ConfigProps;
   forceAuth?: boolean;
+  namespace?: string;
 }
 
 const Auth0Provider: React.FC<Auth0ProviderProps> = ({
@@ -17,6 +18,7 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
   onSuccessfulLogin,
   config,
   forceAuth = true,
+  namespace
 }) => {
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   const [user, setUser] = React.useState();
@@ -43,15 +45,15 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
 
       if (checkIfAuthenticated) {
         /* get user details */
-        const getUser = await auth0FromHook.getUser();
-        setUser(getUser);
+        const userDetails = await auth0FromHook.getUser();
+        setUser(userDetails);
 
         /* get user token */
         const getTokenSilently = await auth0FromHook.getTokenSilently();
         setAccessToken(getTokenSilently);
 
         /* function called when the authentication process is successful */
-        onSuccessfulLogin({ user: getUser, accessToken: getTokenSilently });
+        onSuccessfulLogin({ user: userSetup(getTokenSilently, userDetails, namespace), accessToken: getTokenSilently });
       } else {
         /* redirects to login page is user is not authenticated */
         if (!checkIfAuthenticated && forceAuth) {
@@ -71,15 +73,15 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
     // auth0Client && auth0Client.handleRedirectCallback();
 
     /* get user details */
-    const getUser = auth0Client && await auth0Client.getUser();
-    setUser(getUser);
+    const userDetails = auth0Client && await auth0Client.getUser();
+    setUser(userDetails);
 
     /* get user token */
     const getTokenSilently = auth0Client && await auth0Client.getTokenSilently();
     setAccessToken(getTokenSilently);
 
     /* function called when the authentication process is successful */
-    onSuccessfulLogin({ user: getUser, accessToken: getTokenSilently });
+    onSuccessfulLogin({ user: userSetup(getTokenSilently, userDetails, namespace), accessToken: getTokenSilently });
 
     setLoading(false);
   };
