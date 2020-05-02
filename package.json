@@ -1,7 +1,7 @@
 {
   "name": "react-auth0-helper",
   "description": "with @auth0/auth0-spa-js",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "author": "Andrea & Shiundu",
   "license": "ISC",
   "bugs": {
@@ -33,7 +33,7 @@
     "lint:watch": "yarn lint -- --watch"
   },
   "dependencies": {
-    "@auth0/auth0-spa-js": "1.6.6",
+    "@auth0/auth0-spa-js": "1.6.5",
     "jwt-decode": "^2.2.0",
     "react": "16.13.1",
     "typescript": "^3.8.3"
