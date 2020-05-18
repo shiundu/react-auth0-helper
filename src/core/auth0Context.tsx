@@ -5,6 +5,7 @@ const defaultValues = {
   isLoading: undefined,
   isAuthenticated: undefined,
   logout: undefined,
+  login: undefined,
   user: undefined,
   accessToken: undefined,
   handleRedirectCallback: () => null,

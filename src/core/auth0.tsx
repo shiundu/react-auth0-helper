@@ -91,6 +91,10 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
     });
   };
 
+  const onLogin = () => {
+    auth0Client && auth0Client.loginWithRedirect();
+  };
+
   return (
     <AuthProvider
       value={{
@@ -100,6 +104,7 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
         isLoading: loading,
         logout: onLogout,
         handleRedirectCallback,
+        login: onLogin,
       }}
     >
       {children}

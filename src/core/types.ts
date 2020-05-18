@@ -26,4 +26,5 @@ export type WithAuth0Props = {
   user: any;
   accessToken: string;
   handleRedirectCallback: () => void;
+  login: () => void,
 };
