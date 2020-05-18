@@ -92,7 +92,7 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
   };
 
   const onLogin = () => {
-    auth0Client && auth0Client.loginWithRedirect();
+    return auth0Client && auth0Client.loginWithRedirect();
   };
 
   return (

@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "build": "babel src --out-dir build/ --extensions .ts,.tsx,.js,.jsx",
-    "prepublish": "tsc && yarn run lint && yarn run build",
+    "prepare": "tsc && yarn run lint && yarn run build",
     "lint": "tslint \"src/**/*.{ts,tsx}\" --project ./tsconfig.json",
     "lint:fix": "tslint \"src/**/*.{ts,tsx}\" --project ./tsconfig.json --fix",
     "lint:watch": "yarn lint -- --watch"
