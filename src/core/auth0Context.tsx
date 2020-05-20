@@ -2,8 +2,8 @@ import * as React from 'react';
 import { WithAuth0Props } from './types';
 
 const defaultValues = {
-  isLoading: undefined,
-  isAuthenticated: undefined,
+  isLoading: true,
+  isAuthenticated: false,
   logout: undefined,
   login: undefined,
   user: undefined,
