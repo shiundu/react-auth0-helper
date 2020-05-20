@@ -1,7 +1,7 @@
 import createAuth0Client from '@auth0/auth0-spa-js';
 import Auth0Client from '@auth0/auth0-spa-js/dist/typings/Auth0Client';
 import * as React from 'react';
-import { onRedirectCallback, userSetup } from '../utils/authUtils';
+import { onRedirectCallback, userSetup, doStoredRequest, storeOriginalRequest } from '../utils/authUtils';
 import { AuthProvider } from './auth0Context';
 import { ConfigProps, LogoutProps } from './types';
 
@@ -54,10 +54,15 @@ const Auth0Provider: React.FC<Auth0ProviderProps> = ({
 
         /* function called when the authentication process is successful */
         onSuccessfulLogin({ user: userSetup(getTokenSilently, userDetails, namespace), accessToken: getTokenSilently });
+
+
+        /* redirect the user if a request was stored */
+        doStoredRequest(config.client_id);
       } else {
         /* redirects to login page is user is not authenticated */
         if (!checkIfAuthenticated && forceAuth) {
-          auth0FromHook.loginWithRedirect();
+          storeOriginalRequest(config.client_id);
+          await auth0FromHook.loginWithRedirect();
         }
       }
       setLoading(false);
